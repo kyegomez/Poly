@@ -1,7 +1,7 @@
 [![Multi-Modality](agorabanner.png)](https://discord.gg/qUtxnK2NMf)
 
 # Poly
-A simple Fluid, PolyMorhic,and shapeless package that activates radically flexiblity and simplicity in your programs
+A simple Fluid, PolyMorphic,and shapeless package that activates radically flexiblity and simplicity in your programs
 
 -----
 
