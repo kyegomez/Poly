@@ -1,58 +1,55 @@
-from typing import Any
+import threading
+from typing import Any, TypeVar, Generic
+import pickle
 
+T = TypeVar('T')
 
-class Poly:
-    """
-    A class to create Polymorphic type objects
-
-    ...
-    Attributes
-    ----------
-    data: Any
-        the data to determine the type of
-    data_type: type
-        the deterined type of the data
-    -----------
-
-    Methods
-    -------
-    determine_type():
-        Determines the type of the type of data
-    select_type():
-        selects the approrate type from the typing module or any other types or custom types
-    """
-
-    def __init__(self, data: Any):
-        """
-        Constructs all the necessary attributes for the poly object
-
-        Parameters:
-        -----------
-            data: Any
-                the data to determine the type of        
-        """
+class Poly(Generic[T]):
+    def __init__(self, data: Any, verbose=False):
         self.data = data
-        self.data_type = self.determine_type()
-
-    def determine_type(self):
-        """
-        Determines the type of the data
-
-        Returns
-        ------
-        type:
-        The determined type of the data
-        """
-        return type(self.data)
+        self.type_mapping = {}
+        self.alias_mapping = {}
+        self.lock = threading.Lock()
+        self.verbose = verbose
     
-    def select_type(self):
-        """
-        Selects the approate type from the typing module or any other types or custom types
-
-        Returns:
-        -------
-        type:
-            the selected type
-        """
-        return self.data_type
+    def determine(self):
+        with self.lock:
+            data = type(self.data)
+            if data not in self.type_mapping:
+                self.type_mapping[data] = data
+            return self.type_mapping[data]
     
+    def select(self, target):
+        return self.determine()
+    
+    def shift(self, target):
+        try:
+            return target(self.data)
+        except ValueError:
+            raise TypeError(f"Cannot shape shift {self.data} to {target}")
+    
+    def validate(self, target):
+        if not isinstance(self.data, target):
+            raise TypeError(f"{self.data} is not of type {target}")
+        return True
+    
+    def add_alias(self, alias, target):
+        self.alias_mapping[alias] = target
+
+    def annotate(self, annotation):
+        self.data: annotation
+    
+    def extend(self, extension):
+        class ExtendedType(type(self.data), extension):
+            pass
+        self.data = ExtendedType(self.data)
+    
+    def serialize(self):
+        return pickle.dumps(self.data)
+    
+    def deserialize(self, serialized_data):
+        self.data = pickle.loads(serialized_data)
+        return self.data
+    
+    def __instancecheck__(self, instance):
+        return isinstance(instance, self.select())
