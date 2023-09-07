@@ -55,6 +55,6 @@ class Poly(Generic[T]):
 def my_func(a: Poly):
     print(type(a))
 
-my_func('10')
+example = type(my_func('10'))
 
 

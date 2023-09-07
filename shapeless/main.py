@@ -1,3 +1,4 @@
+import logging
 import threading
 from typing import Any, TypeVar, Generic
 import pickle
@@ -5,22 +6,33 @@ import pickle
 T = TypeVar('T')
 
 class Poly(Generic[T]):
-    def __init__(self, data: Any, verbose=False):
+    def __init__(
+            self, 
+            data: Any, 
+            verbose: bool = False
+        ):
         self.data = data
         self.type_mapping = {}
         self.alias_mapping = {}
         self.lock = threading.Lock()
-        self.verbose = verbose
+        if self.verbose:
+            logging.info(f"Created a new Poly object with data: {self.data}")
+
     
     def determine(self):
         with self.lock:
             data = type(self.data)
             if data not in self.type_mapping:
                 self.type_mapping[data] = data
+            if self.verbose:
+                logging.info(f"Determines type of data: {data}")
             return self.type_mapping[data]
     
     def select(self, target):
-        return self.determine()
+        selected =  self.determine()
+        if self.verbose:
+            logging.info(f"Selected type: {selected}")
+        return selected
     
     def shift(self, target):
         try:
