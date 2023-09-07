@@ -51,216 +51,153 @@ my_func(p)  # <class '__main__.Poly'>
 ------
 
 # Documentation
-
-The `Poly` class is a utility class tailored towards dynamic type handling in Python. It provides functionalities that allow developers to determine, select, shift, validate, alias, annotate, extend, serialize, and deserialize types, making it a versatile tool in many programming scenarios. The class also focuses on thread safety and comes with an optional logging mechanism.
+`Poly` is a utility class that encapsulates dynamic type handling for any data. It provides flexibility and convenience when working with types. With `Poly`, users can determine, select, shift, validate, alias, annotate, extend, serialize, and deserialize data types. The class also ensures thread safety and supports optional logging of operations.
 
 ## Class Definition:
 
 ```python
 class Poly(Generic[T]):
-    """
-    The Poly class is a utility class that provides dynamic type handling.
-    It allows users to determine, select, shift, validate, alias, annotate, extend, serialize, and deserialize types.
-    It also provides thread safety and optional logging.
-
-    Parameters:
-    - data (Any): The data whose type is to be managed.
-    - verbose (bool, optional): If True, operations will be logged. Default is False.
-    """
 ```
 
-### Initialization:
+### Parameters:
 
-```python
-def __init__(self, data: Any, verbose: bool = False):
-    """
-    Initialize a new Poly object.
+- **data (Any)**: Data whose type is to be managed.
+- **verbose (bool, optional)**: If `True`, operations will be logged. Default is `False`.
 
-    Parameters:
-    - data (Any): The data whose type is to be handled.
-    - verbose (bool, optional): If True, log all operations. Default is False.
-    """
-```
+## Methods:
 
-### Methods:
+### `__init__(self, data: Any, verbose: bool = False)`
 
-#### determine:
+Initializes a new instance of `Poly`.
 
-```python
-def determine(self):
-    """
-    Determine the type of the data.
+### `determine(self) -> Type`
 
-    Returns:
-    - Type of the data.
-    """
-```
+Determines the type of the contained data.
 
-#### select:
+**Returns**: 
+- **Type** - The type of the data.
 
-```python
-def select(self, target):
-    """
-    Select the type of the data.
+### `select(self, target) -> Type`
 
-    Parameters:
-    - target: The target type to select.
+Selects the type of the data.
 
-    Returns:
-    - The selected type.
-    """
-```
+**Parameters**:
+- **target**: The target type to select.
 
-#### shift:
+**Returns**: 
+- **Type** - The selected type.
 
-```python
-def shift(self, target):
-    """
-    Attempt to shift the data to the target type.
+### `shift(self, target: Type) -> Any`
 
-    Parameters:
-    - target: The target type to shift to.
+Tries to convert the data to the specified target type.
 
-    Returns:
-    - The data shifted to the target type.
+**Parameters**:
+- **target**: The desired type to convert the data to.
 
-    Raises:
-    - TypeError: If the data cannot be shifted to the target type.
-    """
-```
+**Returns**: 
+- **Any** - The data after conversion.
 
-#### validate:
+**Raises**: 
+- **TypeError**: If the data cannot be shifted to the target type.
 
-```python
-def validate(self, target):
-    """
-    Validate that the data is of the target type.
+### `validate(self, target: Type) -> bool`
 
-    Parameters:
-    - target: The target type to validate against.
+Checks if the data is of the given type.
 
-    Returns:
-    - True if data is of target type, otherwise False.
+**Parameters**:
+- **target**: The type to check against.
 
-    Raises:
-    - TypeError: If the data is not of the target type.
-    """
-```
+**Returns**: 
+- **bool** - `True` if the data is of the target type, `False` otherwise.
 
-#### add_alias:
+**Raises**:
+- **TypeError**: If the data is not of the target type.
 
-```python
-def add_alias(self, alias, target):
-    """
-    Add an alias for a type.
+### `add_alias(self, alias: str, target: Type)`
 
-    Parameters:
-    - alias: The alias name.
-    - target: The target type.
-    """
-```
+Creates an alias for a specific type.
 
-#### annotate:
+**Parameters**:
+- **alias**: Alias name.
+- **target**: Target type for which alias is created.
 
-```python
-def annotate(self, annotation):
-    """
-    Annotate the data with a type.
+### `annotate(self, annotation: Type)`
 
-    Parameters:
-    - annotation: The type annotation.
-    """
-```
+Provides a type hint to the data.
 
-#### extend:
+**Parameters**:
+- **annotation**: The type hint.
 
-```python
-def extend(self, extension):
-    """
-    Extend the type of the data with a new type.
+### `extend(self, extension: Type)`
 
-    Parameters:
-    - extension: The new type to extend with.
-    """
-```
+Extends the current type of data with a new type.
 
-#### serialize:
+**Parameters**:
+- **extension**: The new type to be added to the current type.
 
-```python
-def serialize(self):
-    """
-    Serialize the data.
+### `serialize(self) -> bytes`
 
-    Returns:
-    - The serialized data in byte format.
-    """
-```
+Converts the data into its byte representation.
 
-#### deserialize:
+**Returns**: 
+- **bytes** - The byte representation of the data.
 
-```python
-def deserialize(self, serialized_data):
-    """
-    Deserialize the data.
+### `deserialize(self, serialized_data: bytes) -> Any`
 
-    Parameters:
-    - serialized_data: The data in serialized format.
+Converts byte representation back to its original form.
 
-    Returns:
-    - The deserialized data.
-    """
-```
+**Parameters**:
+- **serialized_data**: Byte representation of data.
 
-#### __instancecheck__:
+**Returns**: 
+- **Any** - The deserialized data.
 
-```python
-def __instancecheck__(self, instance):
-    """
-    Check if an instance is of the selected type.
+### `__instancecheck__(self, instance: Any) -> bool`
 
-    Parameters:
-    - instance: The instance to check.
+Checks if an instance matches the selected type.
 
-    Returns:
-    - True if the instance is of the selected type, False otherwise.
-    """
-```
+**Parameters**:
+- **instance**: The instance to be checked.
+
+**Returns**: 
+- **bool** - `True` if the instance matches, otherwise `False`.
 
 ## Usage Examples:
 
-### Example 1: Basic Type Handling
+### 1. Determining and Selecting Type
+
 ```python
 from shapeless import Poly
 
-p = Poly(42)
-print(p.determine())  # <class 'int'>
+data = 1234
+p = Poly(data, verbose=True)
+print(p.determine())  # Outputs: <class 'int'>
+print(p.select(int))  # Outputs: <class 'int'>
 ```
 
-### Example 2: Shifting and Validation
-```python
-from shapeless import Poly
+### 2. Shifting and Validating Type
 
-p = Poly("123")
-p.shift(int)         # Transforms "123" to 123
-p.validate(int)      # Validates data is of type 'int'
+```python
+p.shift(str)
+print(p.data)  # Outputs: "1234"
+p.validate(str)  # Validates if data is of type 'str'
 ```
 
-### Example 3: Aliasing and Serialization
-```python
-from shapeless import Poly
+### 3. Serialization and Deserialization
 
-p = Poly(42)
-p.add_alias("Integer", int)
+```python
 serialized_data = p.serialize()
-print(serialized_data)  # b'\x80\x04\x95\x11\x00\x00\x00\x00\x00\x00\x00K*.'
-
-deserialized_data = p.deserialize(serialized_data)
-print(deserialized_data)  # 42
+new_poly = Poly(0)
+new_poly.deserialize(serialized_data)
+print(new_poly.data)  # Outputs: "1234"
 ```
 
-## Mathematical Formula:
+## Mathematical Representation:
 
-The `Poly` class does not have an inherent mathematical formula as its operations are based on dynamic type handling in a programming context. Instead, it can be thought of as a utility that operates on the set of Python types, with various operations (determination, selection, shifting, etc.) acting as transformations within this set.
+Given data `d` and a set of types `T`, `Poly` allows for dynamic conversions and operations on `d` with respect to `T`. If `t` belongs to `T`, operations are possible. If not, errors might be raised.
+
+Note:
+Ensure thread-safety when using `Poly` in multi-threaded environments. Also, it is essential to be aware of potential pitfalls when serializing and deserializing data, especially when security is a concern.
 
 ## Additional Information:
 
