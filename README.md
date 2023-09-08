@@ -73,7 +73,6 @@ print(sc.add())  # prints 3
 -----
 
 # Why use Shapeless?
-------------------
 
 Shapeless is a powerful tool for creating fluid programs because it allows developers to handle data types dynamically and polymorphically. This means that the same class or function can handle different types of data, making the program more flexible and versatile.
 
@@ -84,7 +83,6 @@ Furthermore, Shapeless provides logging, type aliasing, type annotation, type ex
 In conclusion, Shapeless is a powerful tool for creating fluid programs that can handle a wide range of data types and that are safe, flexible, and easy to understand.
 
 ## Benefits
---------------------------------------------------------
 
 1.  Dynamic Type Handling 🔄: Poly and Shapeless allow developers to handle data types dynamically. This means that the type of data can be determined, selected, shifted, validated, aliased, annotated, extended, serialized, and deserialized on the fly.
 
