@@ -1,1 +1,1 @@
-from shapeless.main import Poly
+from shapeless.main import Poly, shapeless

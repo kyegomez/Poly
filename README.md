@@ -50,6 +50,28 @@ my_func(p)  # <class '__main__.Poly'>
 ```
 ------
 
+# `shapeless` Decorator
+With the shapeless decorator you can wrap entire classes and transform all their variables into the `Poly` type!
+
+```python
+from shapeless import shapeless
+
+@shapeless
+class SimpleClass:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def add(self):
+        return self.x + self.y
+    
+sc = SimpleClass(1, 2)
+print(sc.add())  # prints 3
+
+```
+
+------
+
 # Documentation
 `Poly` is a utility class that encapsulates dynamic type handling for any data. It provides flexibility and convenience when working with types. With `Poly`, users can determine, select, shift, validate, alias, annotate, extend, serialize, and deserialize data types. The class also ensures thread safety and supports optional logging of operations.
 
