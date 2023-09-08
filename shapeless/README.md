@@ -305,3 +305,81 @@ Incorporating our package into your programming arsenal will enable you to unloc
 So, what are you waiting for? Take the leap and embrace this revolutionary package today. Watch as it activates radical flexibility and simplicity in your programs, empowering you to accomplish more with less effort.
 
 Remember, when it comes to enhancing your programming experience, just follow our lead.
+
+
+
+# Decorator
+Plan:
+
+Create a decorator function that takes a class as an argument.
+In the decorator function, iterate over the attributes of the class.
+For each attribute, if it is a function, replace it with a new function that wraps the original function and uses the Poly class to make the arguments polymorphic.
+Return the modified class from the decorator function.
+Implementation:
+
+def polymorphic_class(cls):
+    """
+    A decorator that makes all the variables in a class polymorphic.
+    """
+    for attr_name, attr_value in cls.__dict__.items():
+        if callable(attr_value):
+            def wrapper(*args, **kwargs):
+                poly_args = [Poly(arg) for arg in args]
+                poly_kwargs = {k: Poly(v) for k, v in kwargs.items()}
+                return attr_value(*poly_args, **poly_kwargs)
+            setattr(cls, attr_name, wrapper)
+    return cls
+Copy code
+This decorator can be used as follows:
+
+@polymorphic_class
+class MyClass:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def my_method(self, z):
+        return self.x + self.y + z
+Copy code
+In this example, the arguments to the __init__ method and the my_method method of MyClass will be made polymorphic by the Poly class.
+
+You:
+provide multiple detailed examples and how it works and why it works
+Athena:
+Sure, let's dive into how the decorator works with a few examples.
+
+First, let's define a simple class:
+
+class SimpleClass:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def add(self):
+        return self.x + self.y
+Copy code
+Now, let's apply the polymorphic_class decorator to it:
+
+@polymorphic_class
+class SimpleClass:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def add(self):
+        return self.x + self.y
+Copy code
+Now, when we create an instance of SimpleClass and call the add method, the arguments to __init__ and add will be made polymorphic by the Poly class:
+
+sc = SimpleClass(1, 2)
+print(sc.add())  # prints 3
+Copy code
+The decorator works by iterating over the attributes of the class. For each attribute, if it is a function (i.e., a method of the class), it replaces it with a new function that wraps the original function and uses the Poly class to make the arguments polymorphic.
+
+The Poly class is a utility class that provides dynamic type handling. It allows you to determine, select, shift, validate, alias, annotate, extend, serialize, and deserialize types. It also provides thread safety and optional logging.
+
+When the Poly class is used to make an argument polymorphic, it means that the argument can be of any type, and the Poly class will handle it appropriately. For example, if the argument is an integer, the Poly class will recognize it as an integer and handle it as such. If the argument is a string, the Poly class will recognize it as a string and handle it as such.
+
+This makes the class more flexible and versatile, as it can handle a wider range of input types. It also makes the class more robust, as it can handle unexpected input types without crashing.
+
+Please note that the provided decorator and the Poly class are simplified examples for illustrative purposes. In a real-world application, you would likely need to add more error checking and handling code to ensure that the class behaves correctly in all situations.

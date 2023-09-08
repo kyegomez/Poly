@@ -135,3 +135,28 @@ class Poly(Generic[T]):
         :return: True if the instance is of the selected type, False otherwise.
         """
         return isinstance(instance, self.select())
+    
+def shapeless(cls):
+    """
+    A decorator that makes all the variables in a class polymorphic.
+    """
+    for attr_name, attr_value in cls.__dict__.items():
+        if callable(attr_value):
+            def wrapper(*args, attr_value=attr_value, **kwargs):
+                poly_args = [Poly(arg).data for arg in args]
+                poly_kwargs = {k: Poly(v).data for k, v in kwargs.items()}
+                return attr_value(*poly_args, **poly_kwargs)
+            setattr(cls, attr_name, wrapper)
+    return cls
+
+@shapeless
+class SimpleClass:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def add(self):
+        return self.x + self.y
+    
+sc = SimpleClass(1, 2)
+print(sc.add())  # prints 3
