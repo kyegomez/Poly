@@ -1,8 +1,9 @@
 [![Multi-Modality](agorabanner.png)](https://discord.gg/qUtxnK2NMf)
 
-# Poly
-A Fluid, PolyMorphic,and shapeless Types Package that activates radically flexiblity and simplicity in your programs
+<!-- # Poly -->
 ![Poly banner](shapeless.png)
+A Fluid, PolyMorphic,and shapeless Types Package that activates radically flexiblity and simplicity in your programs
+
 
 -----
 
