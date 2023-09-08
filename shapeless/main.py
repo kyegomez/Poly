@@ -149,14 +149,14 @@ def shapeless(cls):
             setattr(cls, attr_name, wrapper)
     return cls
 
-@shapeless
-class SimpleClass:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+# @shapeless
+# class SimpleClass:
+#     def __init__(self, x, y):
+#         self.x = x
+#         self.y = y
 
-    def add(self):
-        return self.x + self.y
+#     def add(self):
+#         return self.x + self.y
     
-sc = SimpleClass(1, 2)
-print(sc.add())  # prints 3
+# sc = SimpleClass(1, 2)
+# print(sc.add())  # prints 3
