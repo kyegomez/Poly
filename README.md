@@ -70,6 +70,39 @@ print(sc.add())  # prints 3
 
 ```
 
+-----
+
+# Why use Shapeless?
+------------------
+
+Shapeless is a powerful tool for creating fluid programs because it allows developers to handle data types dynamically and polymorphically. This means that the same class or function can handle different types of data, making the program more flexible and versatile.
+
+Shapeless also provides thread safety, which is crucial for multi-threaded applications. This ensures that the data remains consistent and prevents race conditions.
+
+Furthermore, Shapeless provides logging, type aliasing, type annotation, type extension, and serialization and deserialization features. These features make it easier to write, debug, and understand the code, and they allow developers to create more complex and flexible data structures.
+
+In conclusion, Shapeless is a powerful tool for creating fluid programs that can handle a wide range of data types and that are safe, flexible, and easy to understand.
+
+## Benefits
+--------------------------------------------------------
+
+1.  Dynamic Type Handling 🔄: Poly and Shapeless allow developers to handle data types dynamically. This means that the type of data can be determined, selected, shifted, validated, aliased, annotated, extended, serialized, and deserialized on the fly.
+
+2.  Thread Safety 🔒: Both Poly and Shapeless provide thread safety, which is crucial for multi-threaded applications. This ensures that the data remains consistent and prevents race conditions.
+
+3.  Logging 📝: With the verbose option, all operations can be logged. This is useful for debugging and understanding the flow of data and operations in the program.
+
+4.  Polymorphism 🐾: Poly and Shapeless make it easy to create polymorphic classes and functions. This means that the same class or function can handle different types of data, making the program more flexible and versatile.
+
+5.  Type Aliasing 🏷️: Poly allows developers to add aliases for types. This can make the code more readable and easier to understand.
+
+6.  Type Annotation 🖊️: Poly provides a method to annotate the data with a type. This can be useful for static type checking and for making the code more self-explanatory.
+
+7.  Type Extension 🧩: With Poly, the type of the data can be extended with a new type. This allows developers to create more complex and flexible data structures.
+
+8.  Serialization and Deserialization 💾: Poly provides methods to serialize and deserialize the data. This is useful for saving and loading data, and for sending and receiving data over a network.
+
+
 ------
 
 # Documentation
