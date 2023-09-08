@@ -2,6 +2,7 @@
 
 <!-- # Poly -->
 ![Poly banner](shapeless.png)
+
 A Fluid, PolyMorphic,and shapeless Types Package that activates radically flexiblity and simplicity in your programs
 
 
