@@ -383,3 +383,106 @@ When the Poly class is used to make an argument polymorphic, it means that the a
 This makes the class more flexible and versatile, as it can handle a wider range of input types. It also makes the class more robust, as it can handle unexpected input types without crashing.
 
 Please note that the provided decorator and the Poly class are simplified examples for illustrative purposes. In a real-world application, you would likely need to add more error checking and handling code to ensure that the class behaves correctly in all situations.
+
+
+# 3 other utils
+
+DynamicType Class: This class could be designed to allow variables to change their type dynamically based on the context. It would handle type checking and conversion internally, making it easier for developers to write flexible and adaptable code.
+class DynamicType:
+    def __init__(self, value):
+        self.value = value
+
+    def __add__(self, other):
+        # Handle addition based on the type of self.value and other.value
+Copy code
+FluidFunction Decorator: This decorator could be used to create functions that can handle any type of data. It would use the DynamicType class internally to handle type checking and conversion.
+def FluidFunction(func):
+    def wrapper(*args, **kwargs):
+        # Convert all arguments to DynamicType
+        # Call the function with the converted arguments
+    return wrapper
+Copy code
+ShapelessModule Class: This class could be used to create modules that can dynamically import and use other modules based on the context. It would make it easier for developers to write modular and adaptable code.
+class ShapelessModule:
+    def __init__(self, module_name):
+        self.module = __import__(module_name)
+
+    def __getattr__(self, attr):
+        # Return the attribute from the imported module
+Copy code
+These tools would make Python more fluid and shapeless, allowing developers to write more flexible and adaptable code.
+
+# 5 utils
+
+DynamicImport Utility: This utility could allow modules to be imported dynamically based on the context. It would make it easier to write modular and adaptable code.
+def dynamic_import(module_name):
+    return __import__(module_name)
+Copy code
+AnyType Decorator: This decorator could be used to allow functions to accept any type of arguments. It would make the functions more flexible and adaptable.
+def any_type(func):
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
+Copy code
+AutoCast Utility: This utility could automatically cast variables to the appropriate type based on the context. It would make the code more fluid and shapeless.
+def auto_cast(value):
+    try:
+        return int(value)
+    except ValueError:
+        try:
+            return float(value)
+        except ValueError:
+            return str(value)
+Copy code
+FlexibleArray Class: This class could allow arrays to store elements of any type. It would make the arrays more flexible and adaptable.
+class FlexibleArray(list):
+    def append(self, item):
+        super().append(DynamicType(item))
+Copy code
+ShapelessDict Class: This class could allow dictionaries to use keys of any type. It would make the dictionaries more fluid and shapeless.
+class ShapelessDict(dict):
+    def __setitem__(self, key, value):
+        super().__setitem__(DynamicType(key), DynamicType(value))
+Copy code
+These tools and utilities would make Python more fluid and shapeless, allowing developers to write more flexible and adaptable code.
+
+
+
+# fluid decorator for funcs
+
+Sure, let's create a fluid function decorator using the Poly class:
+
+def fluid(func):
+    """
+    A decorator that makes a function able to handle any type of arguments.
+
+    :param func: The function to decorate.
+    :return: The decorated function.
+    """
+    def wrapper(*args, **kwargs):
+        # Convert all arguments to Poly
+        poly_args = [Poly(arg) for arg in args]
+        poly_kwargs = {k: Poly(v) for k, v in kwargs.items()}
+
+        try:
+            # Call the function with the converted arguments
+            return func(*poly_args, **poly_kwargs)
+        except Exception as e:
+            # Log any errors that occur during the function call
+            logging.error(f"Error in function {func.__name__}: {e}")
+            raise
+
+    return wrapper
+Copy code
+Here's an example of how to use the fluid decorator:
+
+@fluid
+def add(a, b):
+    return a.data + b.data
+
+print(add(1, 2))  # Outputs: 3
+print(add('Hello, ', 'World!'))  # Outputs: 'Hello, World!'
+print(add(1, '2'))  # Raises a TypeError
+Copy code
+With the fluid decorator, the add function can handle any type of arguments. It can add two integers, two strings, or even an integer and a string. This makes the function more fluid and shapeless.
+

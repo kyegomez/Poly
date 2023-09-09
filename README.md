@@ -75,6 +75,22 @@ print(sc.add())  # prints 3
 
 -----
 
+
+# `fluid` Decorator
+Fluid is like the `shapeless` decorator but for classes, just wrap it around your function to transform all the variables to the `Poly` shapeless type.
+
+```python
+from shapeless import fluid
+
+@fluid
+def add(a, b):
+    return a.data + b.data
+
+print(add(1, 2))
+print(add("hello", 'world'))
+
+```
+
 # Why use Shapeless?
 
 Shapeless is a powerful tool for creating fluid programs because it allows developers to handle data types dynamically and polymorphically. This means that the same class or function can handle different types of data, making the program more flexible and versatile.

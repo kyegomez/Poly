@@ -149,14 +149,25 @@ def shapeless(cls):
             setattr(cls, attr_name, wrapper)
     return cls
 
-# @shapeless
-# class SimpleClass:
-#     def __init__(self, x, y):
-#         self.x = x
-#         self.y = y
+def fluid(func):
+    """
+    A decorator that makes a function able to handle any type of arguments.
 
-#     def add(self):
-#         return self.x + self.y
-    
-# sc = SimpleClass(1, 2)
-# print(sc.add())  # prints 3
+    :param func: The function to decorate.
+    :return: The decorated function.
+    """
+    def wrapper(*args, **kwargs):
+        # Convert all arguments to Poly
+        poly_args = [Poly(arg) for arg in args]
+        poly_kwargs = {k: Poly(v) for k, v in kwargs.items()}
+
+        try:
+            # Call the function with the converted arguments
+            return func(*poly_args, **poly_kwargs)
+        except Exception as e:
+            # Log any errors that occur during the function call
+            logging.error(f"Error in function {func.__name__}: {e}")
+            raise
+
+    return wrapper
+
