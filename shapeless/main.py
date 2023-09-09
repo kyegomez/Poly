@@ -171,3 +171,50 @@ def fluid(func):
 
     return wrapper
 
+def dynamic_import(module_name):
+    """
+    Dynamically import a module
+
+    :param module_name: The Name of the module to import
+    :return: The imported module
+    :return: The imported module
+    """
+    return __import__(module_name)
+
+def auto_cast(value):
+    """
+    Auto cast a value to the right type
+    :param value: the value to cast
+    :return the casted value
+    """
+    return Poly(value).data
+
+def shapeless_array(*args):
+    """
+    Create an array that can store elements of any type
+
+    :param args: The elements to store in the array.
+    :return: The Array.
+    """
+    return [Poly(arg).data for arg in args]
+
+def shapeless_dict(**kwargs):
+    """
+    Create a dict that use keys of any type
+
+    :param kwargs: The keys and values to store in the dict
+    :return: the dict
+    """
+    return {Poly(k).data: Poly(v).data for k, v in kwargs.items()}
+
+# # Create an array that can store elements of any type
+# array = shapeless_array(1, '2', 3.0, '4.0', [5], {6: '6'})
+# print(array)  # Outputs: [1, '2', 3.0, '4.0', [5], {6: '6'}]
+
+
+# # Create a dictionary that can use keys of any type
+# # Create a dictionary that can use keys of any type
+# dictionary = shapeless_dict(one=1, two='2', three=3.0, four='4.0')
+# print(dictionary)  # Outputs: {'one': 1, 'two': '2', 'three': 3.0, 'four': '4.0'}
+
+
