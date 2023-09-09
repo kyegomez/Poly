@@ -1,10 +1,11 @@
 [![Multi-Modality](agorabanner.png)](https://discord.gg/qUtxnK2NMf)
 
-<!-- # Poly -->
-![Poly banner](shapeless.png)
+# Poly 💧
+<!-- ![Poly banner](shapeless.png) -->
 
 A Fluid, PolyMorphic,and shapeless Types Package that activates radically flexiblity and simplicity in your programs
 
+[Shapeless Announcement 💧](https://medium.com/@kyeg/embrace-shapelessness-the-design-philosophy-of-the-future-1d530c075789)
 
 -----
 
@@ -90,6 +91,8 @@ print(add(1, 2))
 print(add("hello", 'world'))
 
 ```
+
+----
 
 # Why use Shapeless?
 

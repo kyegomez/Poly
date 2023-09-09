@@ -166,7 +166,7 @@ def fluid(func):
             return func(*poly_args, **poly_kwargs)
         except Exception as e:
             # Log any errors that occur during the function call
-            logging.error(f"Error in function {func.__name__}: {e}")
+            logging.error(f"Error in function applying the fluid wrapper {func.__name__}: {e}")
             raise
 
     return wrapper
