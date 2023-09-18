@@ -1,1 +1,6 @@
 pytest
+
+
+mkdocs
+mkdocs-material
+mkdocs-glightbox
