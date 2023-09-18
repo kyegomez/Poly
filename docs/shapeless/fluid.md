@@ -1,4 +1,4 @@
-# `fluid`` Documentation
+# `fluid` Documentation
 
 ## Overview
 

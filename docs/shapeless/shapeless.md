@@ -1,4 +1,4 @@
-# `shapeless`` Documentation
+# `shapeless` Documentation
 
 ## Overview
 
