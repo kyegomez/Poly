@@ -293,15 +293,3 @@ def shapeless_dict(**kwargs):
     :return: the dict
     """
     return {Poly(k).data: Poly(v).data for k, v in kwargs.items()}
-
-# # Create an array that can store elements of any type
-# array = shapeless_array(1, '2', 3.0, '4.0', [5], {6: '6'})
-# print(array)  # Outputs: [1, '2', 3.0, '4.0', [5], {6: '6'}]
-
-
-# # Create a dictionary that can use keys of any type
-# # Create a dictionary that can use keys of any type
-# dictionary = shapeless_dict(one=1, two='2', three=3.0, four='4.0')
-# print(dictionary)  # Outputs: {'one': 1, 'two': '2', 'three': 3.0, 'four': '4.0'}
-
-
