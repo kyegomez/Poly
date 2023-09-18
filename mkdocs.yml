@@ -86,4 +86,5 @@ nav:
       - shapeless.shapeless: "shapeless/shapeless.md"
 - Examples:
     - Overview: "examples/index.md"
-    - Polymorphic Functions in Python with Shapeless, A Journey into the Fluid World of Adaptation: "examples/story.md"
+    - HowShapelessWorks: "examples/story.md"
+  
