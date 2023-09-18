@@ -992,9 +992,6 @@ def fluid(
 
         def run(self):
             print(self.x.type)
-
-
-
     """
 
     def wrap(cls):
