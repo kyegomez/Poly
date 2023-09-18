@@ -1,4 +1,4 @@
-#an experimental shapeless class wrapper that acts like a fluid
+#an experimental shapeless class wrapper that acts like a liquid
 #but transforms all the variables initialized into polymorphic variables
 import copy
 import inspect
@@ -6,8 +6,10 @@ import keyword
 import re
 import sys
 import types
+from typing import Any
+from shapeless.main import Poly
 
-__all__ = ['fluid',
+__all__ = ['liquid',
            'field',
            'Field',
            'FrozenInstanceError',
@@ -17,15 +19,15 @@ __all__ = ['fluid',
            'fields',
            'asdict',
            'astuple',
-           'make_fluid',
+           'make_liquid',
            'replace',
-           'is_fluid',
+           'is_liquid',
            ]
 
 # Conditions for adding methods.  The boxes indicate what action the
-# fluid decorator takes.  For all of these tables, when I talk
+# liquid decorator takes.  For all of these tables, when I talk
 # about init=, repr=, eq=, order=, unsafe_hash=, or frozen=, I'm
-# referring to the arguments to the @fluid decorator.  When
+# referring to the arguments to the @liquid decorator.  When
 # checking if a dunder method already exists, I mean check for an
 # entry in the class's __dict__.  I never check to see if an attribute
 # is defined in a base class.
@@ -143,7 +145,7 @@ __all__ = ['fluid',
 #
 # Note that a class may already have __hash__=None if it specified an
 # __eq__ method in the class body (not one that was created by
-# @fluid).
+# @liquid).
 #
 # See _hash_action (below) for a coded version of this table.
 
@@ -153,7 +155,7 @@ class FrozenInstanceError(AttributeError): pass
 
 # A sentinel object for default values to signal that a default
 # factory will be used.  This is given a nice repr() which will appear
-# in the function signature of fluides' constructors.
+# in the function signature of liquides' constructors.
 class _HAS_DEFAULT_FACTORY_CLASS:
     def __repr__(self):
         return '<factory>'
@@ -181,11 +183,11 @@ _FIELD_INITVAR = _FIELD_BASE('_FIELD_INITVAR')
 
 # The name of an attribute on the class where we store the Field
 # objects.  Also used to check if a class is a Data Class.
-_FIELDS = '__fluid_fields__'
+_FIELDS = '__liquid_fields__'
 
 # The name of an attribute on the class that stores the parameters to
-# @fluid.
-_PARAMS = '__fluid_params__'
+# @liquid.
+_PARAMS = '__liquid_params__'
 
 # The name of the function, that if it exists, is called at the end of
 # __init__.
@@ -272,7 +274,7 @@ class Field:
             func(self.default, owner, name)
 
 
-class _fluidParams:
+class _liquidParams:
     __slots__ = (
         'init',
         'repr',
@@ -299,7 +301,7 @@ class _fluidParams:
         self.frozen = frozen
 
     def __repr__(self):
-        return ('_fluidParams('
+        return ('_liquidParams('
                 f'init={self.init!r},'
                 f'repr={self.repr!r},'
                 f'eq={self.eq!r},'
@@ -322,7 +324,7 @@ def field(
         compare=True, 
         metadata=None
     ):
-    """Return an object to identify fluid fields.
+    """Return an object to identify liquid fields.
 
     default is the default value of the field.  default_factory is a
     0-argument function called to initialize a field's value.  If init
@@ -331,7 +333,7 @@ def field(
     object's repr().  If hash is True, the field will be included in
     the object's hash().  If compare is True, the field will be used
     in comparison functions.  metadata, if specified, must be a
-    mapping which is stored but not otherwise examined by fluid.
+    mapping which is stored but not otherwise examined by liquid.
 
     It is an error to specify both default and default_factory.
     """
@@ -570,15 +572,12 @@ def _hash_fn(fields):
 
 
 def _is_classvar(a_type, typing):
-    # This test uses a typing internal class, but it's the best way to
-    # test if this is a ClassVar.
-    return type(a_type) is typing._ClassVar
+    return type(a_type) is typing.ClassVar
 
-
-def _is_initvar(a_type, fluides):
+def _is_initvar(a_type, liquides):
     # The module we're checking against is the module we're
-    # currently in (fluides.py).
-    return a_type is fluides.InitVar
+    # currently in (liquides.py).
+    return a_type is liquides.InitVar
 
 
 def _is_type(annotation, cls, a_module, a_type, is_type_predicate):
@@ -604,12 +603,12 @@ def _is_type(annotation, cls, a_module, a_type, is_type_predicate):
 
     # With string annotations, cv0 will be detected as a ClassVar:
     #   CV = ClassVar
-    #   @fluid
+    #   @liquid
     #   class C0:
     #     cv0: CV
 
     # But in this example cv1 will not be detected as a ClassVar:
-    #   @fluid
+    #   @liquid
     #   class C1:
     #     CV = ClassVar
     #     cv1: CV
@@ -619,7 +618,7 @@ def _is_type(annotation, cls, a_module, a_type, is_type_predicate):
     # ClassVar.  This is a fairly obscure corner case, and the best
     # way to fix it would be to eval() the string "CV" with the
     # correct global and local namespaces.  However that would involve
-    # a eval() penalty for every single field of every fluid
+    # a eval() penalty for every single field of every liquid
     # that's defined.  It was judged not worth it.
 
     match = _MODULE_IDENTIFIER_RE.match(annotation)
@@ -628,7 +627,7 @@ def _is_type(annotation, cls, a_module, a_type, is_type_predicate):
         module_name = match.group(1)
         if not module_name:
             # No module name, assume the class's module did
-            # "from fluides import InitVar".
+            # "from liquides import InitVar".
             ns = sys.modules.get(cls.__module__).__dict__
         else:
             # Look up module_name in the class's module.
@@ -658,7 +657,8 @@ def _get_field(cls, a_name, a_type):
 
     # Only at this point do we know the name and the type.  Set them.
     f.name = a_name
-    f.type = a_type
+    # f.type = a_type
+    f.type = Poly(a_type)
 
     # Assume it's a normal field until proven otherwise.  We're next
     # going to decide if it's a ClassVar or InitVar, everything else
@@ -691,11 +691,11 @@ def _get_field(cls, a_name, a_type):
     # then it's an InitVar.
     if f._field_type is _FIELD:
         # The module we're checking against is the module we're
-        # currently in (fluides.py).
-        fluides = sys.modules[__name__]
-        if (_is_initvar(a_type, fluides)
+        # currently in (liquides.py).
+        liquides = sys.modules[__name__]
+        if (_is_initvar(a_type, liquides)
             or (isinstance(f.type, str)
-                and _is_type(f.type, cls, fluides, fluides.InitVar,
+                and _is_type(f.type, cls, liquides, liquides.InitVar,
                              _is_initvar))):
             f._field_type = _FIELD_INITVAR
 
@@ -785,7 +785,7 @@ def _process_class(cls, init, repr, eq, order, unsafe_hash, frozen):
     # is defined by the base class, which is found first.
     fields = {}
 
-    setattr(cls, _PARAMS, _fluidParams(init, repr, eq, order,
+    setattr(cls, _PARAMS, _liquidParams(init, repr, eq, order,
                                            unsafe_hash, frozen))
 
     # Find our base classes in reverse MRO order, and exclude
@@ -793,13 +793,13 @@ def _process_class(cls, init, repr, eq, order, unsafe_hash, frozen):
     # override earlier field definitions in base classes.  As long as
     # we're iterating over them, see if any are frozen.
     any_frozen_base = False
-    has_fluid_bases = False
+    has_liquid_bases = False
     for b in cls.__mro__[-1:0:-1]:
         # Only process classes that have been processed by our
         # decorator.  That is, they have a _FIELDS attribute.
         base_fields = getattr(b, _FIELDS, None)
         if base_fields:
-            has_fluid_bases = True
+            has_liquid_bases = True
             for f in base_fields.values():
                 fields[f.name] = f
             if getattr(b, _PARAMS).frozen:
@@ -848,20 +848,20 @@ def _process_class(cls, init, repr, eq, order, unsafe_hash, frozen):
         if isinstance(value, Field) and not name in cls_annotations:
             raise TypeError(f'{name!r} is a field but has no type annotation')
 
-    # Check rules that apply if we are derived from any fluides.
-    if has_fluid_bases:
+    # Check rules that apply if we are derived from any liquides.
+    if has_liquid_bases:
         # Raise an exception if any of our bases are frozen, but we're not.
         if any_frozen_base and not frozen:
-            raise TypeError('cannot inherit non-frozen fluid from a '
+            raise TypeError('cannot inherit non-frozen liquid from a '
                             'frozen one')
 
         # Raise an exception if we're frozen, but none of our bases are.
         if not any_frozen_base and frozen:
-            raise TypeError('cannot inherit frozen fluid from a '
+            raise TypeError('cannot inherit frozen liquid from a '
                             'non-frozen one')
 
     # Remember all of the fields on our class (including bases).  This
-    # also marks this class as being a fluid.
+    # also marks this class as being a liquid.
     setattr(cls, _FIELDS, fields)
 
     # Was this class defined with an explicit __hash__?  Note that if
@@ -892,7 +892,7 @@ def _process_class(cls, init, repr, eq, order, unsafe_hash, frozen):
                                     # The name to use for the "self"
                                     # param in __init__.  Use "self"
                                     # if possible.
-                                    '__fluid_self__' if 'self' in fields
+                                    '__liquid_self__' if 'self' in fields
                                             else 'self',
                           ))
 
@@ -957,7 +957,7 @@ def _process_class(cls, init, repr, eq, order, unsafe_hash, frozen):
 # _cls should never be specified by keyword, so start it with an
 # underscore.  The presence of _cls is used to detect if this
 # decorator is being called with parameters or not.
-def fluid(
+def liquid(
         _cls=None, 
         *, 
         init=True, 
@@ -983,33 +983,39 @@ def fluid(
     Usage
     #####
 
-    from shapeless import fluid
+    from shapeless import liquid
 
-    @fluid
-    class C:
-        x, # Poly Type
-        y, # Poly Type
+    @liquid
+    class MyClass:
+        x = 1
+        y = "hello"
 
         def run(self):
-            print(self.x.type)
+            print(type(self.x))
+
+    obj = MyClass()
+    print(type(obj.x))
+    print(type(obj.y))
+
+    obj.run()
     """
 
     def wrap(cls):
         return _process_class(cls, init, repr, eq, order, unsafe_hash, frozen)
 
-    # See if we're being called as @fluid or @fluid().
+    # See if we're being called as @liquid or @liquid().
     if _cls is None:
         # We're called with parens.
         return wrap
 
-    # We're called as @fluid without parens.
+    # We're called as @liquid without parens.
     return wrap(_cls)
 
 
 def fields(class_or_instance):
-    """Return a tuple describing the fields of this fluid.
+    """Return a tuple describing the fields of this liquid.
 
-    Accepts a fluid or an instance of one. Tuple elements are of
+    Accepts a liquid or an instance of one. Tuple elements are of
     type Field.
     """
 
@@ -1017,31 +1023,31 @@ def fields(class_or_instance):
     try:
         fields = getattr(class_or_instance, _FIELDS)
     except AttributeError:
-        raise TypeError('must be called with a fluid type or instance')
+        raise TypeError('must be called with a liquid type or instance')
 
     # Exclude pseudo-fields.  Note that fields is sorted by insertion
     # order, so the order of the tuple is as the fields were defined.
     return tuple(f for f in fields.values() if f._field_type is _FIELD)
 
 
-def _is_fluid_instance(obj):
-    """Returns True if obj is an instance of a fluid."""
+def _is_liquid_instance(obj):
+    """Returns True if obj is an instance of a liquid."""
     return not isinstance(obj, type) and hasattr(obj, _FIELDS)
 
 
-def is_fluid(obj):
-    """Returns True if obj is a fluid or an instance of a
-    fluid."""
+def is_liquid(obj):
+    """Returns True if obj is a liquid or an instance of a
+    liquid."""
     return hasattr(obj, _FIELDS)
 
 
 def asdict(obj, *, dict_factory=dict):
-    """Return the fields of a fluid instance as a new dictionary mapping
+    """Return the fields of a liquid instance as a new dictionary mapping
     field names to field values.
 
     Example usage:
 
-      @fluid
+      @liquid
       class C:
           x: int
           y: int
@@ -1051,16 +1057,16 @@ def asdict(obj, *, dict_factory=dict):
 
     If given, 'dict_factory' will be used instead of built-in dict.
     The function applies recursively to field values that are
-    fluid instances. This will also look into built-in containers:
+    liquid instances. This will also look into built-in containers:
     tuples, lists, and dicts.
     """
-    if not _is_fluid_instance(obj):
-        raise TypeError("asdict() should be called on fluid instances")
+    if not _is_liquid_instance(obj):
+        raise TypeError("asdict() should be called on liquid instances")
     return _asdict_inner(obj, dict_factory)
 
 
 def _asdict_inner(obj, dict_factory):
-    if _is_fluid_instance(obj):
+    if _is_liquid_instance(obj):
         result = []
         for f in fields(obj):
             value = _asdict_inner(getattr(obj, f.name), dict_factory)
@@ -1076,11 +1082,11 @@ def _asdict_inner(obj, dict_factory):
 
 
 def astuple(obj, *, tuple_factory=tuple):
-    """Return the fields of a fluid instance as a new tuple of field values.
+    """Return the fields of a liquid instance as a new tuple of field values.
 
     Example usage::
 
-      @fluid
+      @liquid
       class C:
           x: int
           y: int
@@ -1090,17 +1096,17 @@ def astuple(obj, *, tuple_factory=tuple):
 
     If given, 'tuple_factory' will be used instead of built-in tuple.
     The function applies recursively to field values that are
-    fluid instances. This will also look into built-in containers:
+    liquid instances. This will also look into built-in containers:
     tuples, lists, and dicts.
     """
 
-    if not _is_fluid_instance(obj):
-        raise TypeError("astuple() should be called on fluid instances")
+    if not _is_liquid_instance(obj):
+        raise TypeError("astuple() should be called on liquid instances")
     return _astuple_inner(obj, tuple_factory)
 
 
 def _astuple_inner(obj, tuple_factory):
-    if _is_fluid_instance(obj):
+    if _is_liquid_instance(obj):
         result = []
         for f in fields(obj):
             value = _astuple_inner(getattr(obj, f.name), tuple_factory)
@@ -1115,7 +1121,7 @@ def _astuple_inner(obj, tuple_factory):
         return copy.deepcopy(obj)
 
 
-def make_fluid(
+def make_liquid(
         cls_name, 
         fields, 
         *, 
@@ -1128,18 +1134,18 @@ def make_fluid(
         unsafe_hash=False,
         frozen=False
     ):
-    """Return a new dynamically created fluid.
+    """Return a new dynamically created liquid.
 
-    The fluid name will be 'cls_name'.  'fields' is an iterable
+    The liquid name will be 'cls_name'.  'fields' is an iterable
     of either (name), (name, type) or (name, type, Field) objects. If type is
     omitted, use the string 'typing.Any'.  Field objects are created by
     the equivalent of calling 'field(name, type [, Field-info])'.
 
-      C = make_fluid('C', ['x', ('y', int), ('z', int, field(init=False))], bases=(Base,))
+      C = make_liquid('C', ['x', ('y', int), ('z', int, field(init=False))], bases=(Base,))
 
     is equivalent to:
 
-      @fluid
+      @liquid
       class C(Base):
           x: 'typing.Any'
           y: int
@@ -1148,7 +1154,7 @@ def make_fluid(
     For the bases and namespace parameters, see the builtin type() function.
 
     The parameters init, repr, eq, order, unsafe_hash, and frozen are passed to
-    fluid().
+    liquid().
     """
 
     if namespace is None:
@@ -1185,9 +1191,9 @@ def make_fluid(
 
     namespace['__annotations__'] = anns
     # We use `types.new_class()` instead of simply `type()` to allow dynamic creation
-    # of generic fluid.
+    # of generic liquid.
     cls = types.new_class(cls_name, bases, {}, lambda ns: ns.update(namespace))
-    return fluid(
+    return liquid(
         cls, 
         init=init, 
         repr=repr, 
@@ -1203,7 +1209,7 @@ def replace(obj, **changes):
 
     This is especially useful for frozen classes.  Example usage:
 
-      @fluid(frozen=True)
+      @liquid(frozen=True)
       class C:
           x: int
           y: int
@@ -1216,8 +1222,8 @@ def replace(obj, **changes):
     # We're going to mutate 'changes', but that's okay because it's a
     # new dict, even if called with 'replace(obj, **my_changes)'.
 
-    if not _is_fluid_instance(obj):
-        raise TypeError("replace() should be called on fluid instances")
+    if not _is_liquid_instance(obj):
+        raise TypeError("replace() should be called on liquid instances")
 
     # It's an error to have init=False fields in 'changes'.
     # If a field is not in 'changes', read its value from the provided obj.
@@ -1247,3 +1253,18 @@ def replace(obj, **changes):
     # changes that aren't fields, this will correctly raise a
     # TypeError.
     return obj.__class__(**changes)
+
+
+# @liquid
+# class MyClass:
+#     x = 1
+#     y = "hello"
+
+#     def run(self):
+#         print(type(self.x))
+
+# obj = MyClass()
+# print(type(obj.x))
+# print(type(obj.y))
+
+# obj.run()

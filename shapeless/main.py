@@ -136,6 +136,21 @@ class Poly(Generic[T]):
         """
         return isinstance(instance, self.select())
     
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return instance.__dict__.get(self.name, self.data)
+    
+    def __set__(self, instance, value):
+        if not isinstance(value, self.data.__class__):
+            raise TypeError(f"Expected an instance of type {self.data.__class__.__name__}")
+        instance.__dict__[self.name] = value
+    
+    def __set_name__(self, owner, name):
+        self.name = name
+        
+    
+    
 def shapeless(cls):
     """
     A decorator that makes all the variables in a class polymorphic.
