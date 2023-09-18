@@ -1,20 +1,9 @@
-# Zeta Docs
-
-Welcome to Zeta's Documentation!
-
-Zeta is a modular framework that enables for seamless, reliable, and fluid creation of zetascale AI models.
-
-## Zeta
-
-<!-- ![Zeta Banner](docs/assets/img/zetascale.png) -->
-
-Zeta provides you with reliable, high performance, and fast modular building blocks for building zeta scale neural nets at lightspeed with minimal code and a pythonic API. 
-
-[Click here for Zeta Documentation →](zeta/)
+# Shapless Docs
 
 
-## Examples
+Shapeless is a powerful tool for creating fluid programs because it allows developers to handle data types dynamically and polymorphically. This means that the same class or function can handle different types of data, making the program more flexible and versatile.
 
-Check out Zeta examples for building agents, data retrieval, and more.
 
-[Checkout Zeta examples →](examples/)
+[Click here for Shapeless's Documentation →](shapeless/)
+
+
