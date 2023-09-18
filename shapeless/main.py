@@ -10,7 +10,77 @@ class Poly(Generic[T]):
     The Poly class is a utility class that provides dynamic type handling.
     It allows you to determine, select, shift, validate, alias, annotate, extend, serialize, and deserialize types.
     It also provides thread safety and optional logging.
+
+    Core Methods:
+        determine() -> Type[T]
+            Determines the type of the data.
+
+        select(target: Type[T]) -> Type[T]
+            Selects the type of the data based on the provided target.
+
+        shift(target: Type[T]) -> T
+            Attempts to shift the data to the target type.
+
+        validate(target: Type[T]) -> bool
+            Validates whether the data is of the target type.
+
+        add_alias(alias: str, target: Type[T])
+            Adds an alias for a type.
+
+        annotate(annotation: Type[T])
+            Annotates the data with a type.
+
+        extend(extension: Type[T])
+            Extends the type of the data with a new type.
+
+        serialize() -> bytes
+            Serializes the data.
+
+        deserialize(serialized_data: bytes) -> T
+            Deserializes the data.
+
+        __instancecheck__(self, instance) -> bool
+            Checks if an instance is of the selected type.
+    
+    ###### USAGE EXAMPLESS  ######
+
+
+    1. Alias Types:
+    
+    ```
+    from shapeless import Poly
+
+    # Create a Poly object with a float
+    poly = Poly(3.14)
+
+    # Add an alias for float type
+    poly.add_alias("floating_point", float)
+
+    # Determine the type using the alias
+    data_type = poly.select("floating_point")
+    print(data_type)  # Output: <class 'float'>
+    ```
+    
+    2. Type Shifting with Validation:
+
+    ```
+    from shapeless import Poly
+
+    # Create a Poly object with a string
+    poly = Poly("Hello")
+
+    # Shift data to int type
+    shifted_data = poly.shift(int)
+
+    # Attempt to validate if the data is of int type (will raise a TypeError)
+    try:
+        poly.validate(int)
+    except TypeError as e:
+    print(e)  # Output: "Hello is not of type <class 'int'>"
+    ```
+
     """
+
 
     def __init__(self, data: Any, verbose: bool = False):
         """
@@ -148,7 +218,7 @@ class Poly(Generic[T]):
     
     def __set_name__(self, owner, name):
         self.name = name
-        
+
     
     
 def shapeless(cls):

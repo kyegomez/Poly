@@ -91,8 +91,6 @@ The `Poly` class is designed to simplify type handling tasks, especially when wo
 
 ## Usage Examples:
 
-Certainly! Here are 7 to 8 additional examples demonstrating various use cases of the `Poly` class:
-
 **1. Alias Types:**
 
 ```python
