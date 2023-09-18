@@ -1,5 +1,6 @@
 import pytest
-from shapeless.main import fluid 
+
+from shapeless.main import fluid
 
 
 @pytest.mark.parametrize("a,b,expected", [

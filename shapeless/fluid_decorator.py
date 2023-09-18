@@ -1,11 +1,11 @@
 #an experimental shapeless class wrapper that acts like a fluid
 #but transforms all the variables initialized into polymorphic variables
-import re
-import sys
 import copy
-import types
 import inspect
 import keyword
+import re
+import sys
+import types
 
 __all__ = ['fluid',
            'field',

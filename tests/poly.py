@@ -1,5 +1,7 @@
 import pytest
-from shapeless.main import Poly, shapeless, fluid
+
+from shapeless.main import Poly, fluid, shapeless
+
 
 class TestPoly:
 

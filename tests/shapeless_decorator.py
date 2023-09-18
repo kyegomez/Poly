@@ -1,5 +1,7 @@
-from shapeless.main import Poly, shapeless
 import pytest
+
+from shapeless.main import Poly, shapeless
+
 
 @shapeless
 class MyClass:

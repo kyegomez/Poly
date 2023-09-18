@@ -1,7 +1,7 @@
 import logging
-import threading
-from typing import Any, TypeVar, Generic
 import pickle
+import threading
+from typing import Any, Generic, TypeVar
 
 T = TypeVar('T')
 
