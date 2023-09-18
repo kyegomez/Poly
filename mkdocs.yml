@@ -81,11 +81,8 @@ nav:
 - Shapeless:
     - Overview: "shapeless/index.md"
     - Shapeless:
-      - Shapeless.inference:
-        - Exa.inference.Inference: "exa/inference.md"
-        - Exa.inference.GPTQInference: "exa/gptq_inference.md"
-      - Exa.quantize:
-        - Exa.quantize.Quantize: "exa/quantize.md"
+      - Shapeless.Poly: "shapeless/Poly.md"
+      - Shapeless.fluid: "shapeless/fluid.md"
 - Examples:
     - Overview: "examples/index.md"
     - FlashAttention: "examples/nn/attentions/flash.md"
