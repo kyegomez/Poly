@@ -94,6 +94,28 @@ print(add("hello", 'world'))
 
 ----
 
+# `liquid` Decorator
+- The `liquid` decorator acts like `dataclass` but makes all the types the `Poly` type!
+
+```python
+from shapeless import liquid
+
+#define the liquid decorator
+@liquid
+class MyClass:
+    x = 1
+    y = "hello"
+
+    def run(self):
+        print(type(self.x))
+
+obj = MyClass()
+print(type(obj.x))
+print(type(obj.y))
+
+obj.run()
+```
+
 # Why use Shapeless?
 
 Shapeless is a powerful tool for creating fluid programs because it allows developers to handle data types dynamically and polymorphically. This means that the same class or function can handle different types of data, making the program more flexible and versatile.
