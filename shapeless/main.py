@@ -149,6 +149,8 @@ def shapeless(cls):
             setattr(cls, attr_name, wrapper)
     return cls
 
+
+
 def fluid(func):
     """
     A decorator that makes a function able to handle any type of arguments.

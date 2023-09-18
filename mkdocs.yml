@@ -80,9 +80,10 @@ nav:
     - Overview: "index.md"
 - Shapeless:
     - Overview: "shapeless/index.md"
-    - Shapeless:
-      - Shapeless.Poly: "shapeless/Poly.md"
-      - Shapeless.fluid: "shapeless/fluid.md"
+    - shapeless:
+      - shapeless.Poly: "shapeless/Poly.md"
+      - shapeless.fluid: "shapeless/fluid.md"
+      - shapeless.shapeless: "shapeless/shapeless.md"
 - Examples:
     - Overview: "examples/index.md"
     - FlashAttention: "examples/nn/attentions/flash.md"
