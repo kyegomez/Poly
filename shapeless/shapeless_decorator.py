@@ -977,6 +977,24 @@ def fluid(
     comparison dunder methods are added. If unsafe_hash is true, a
     __hash__() method function is added. If frozen is true, fields may
     not be assigned to after instance creation.
+
+
+    ###
+    Usage
+    #####
+
+    from shapeless import fluid
+
+    @fluid
+    class C:
+        x, # Poly Type
+        y, # Poly Type
+
+        def run(self):
+            print(self.x.type)
+
+
+
     """
 
     def wrap(cls):
