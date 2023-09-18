@@ -1,5 +1,5 @@
 # !pip install shapeless
-from shapeless.main import Poly
+from shapeless import Poly
     
 def my_func(a: Poly):
     print(type(a))
