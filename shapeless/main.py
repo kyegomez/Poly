@@ -276,6 +276,7 @@ def auto_cast(value):
     """
     return Poly(value).data
 
+
 def shapeless_array(*args):
     """
     Create an array that can store elements of any type
