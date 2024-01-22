@@ -1,9 +1,19 @@
-# !pip install shapeless
-from shapeless import Poly
-    
-def my_func(a: Poly):
-    print(type(a))
-
-example = type(my_func('10'))
 
 
+class Poly:
+    attribute: str
+
+class Mutable(Poly):
+    def __init__(self):
+        super().__init__()
+        self.attribute = "Amazing!"
+
+Mutable().attribute
+        
+abra: int =  1
+
+kadabra: str = "alakazam"
+
+abra = kadabra
+
+print(abra)
